@@ -1,0 +1,35 @@
+# 1. prepare key for core/nginx
+./cp2.sh # May need prepare related directories
+
+# 2. generate cert for ims/tomac
+
+Input: fullchain.pem  privkey.pem
+
+# Generate keystore.p12
+Follow this,
+http://www.littlebigextra.com/how-to-enable-communication-over-https-between-2-spring-boot-applications-using-self-signed-certificate/
+
+openssl pkcs12 -export -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -export -in fullchain.pem -inkey privkey.pem -name selfsigned -out keystore.p12
+
+# Generate keystore.jks
+keytool -importkeystore -srcstoretype PKCS12 -srckeystore keystore.p12 -destkeystore keystore.jks -deststoretype pkcs12
+
+password is qianjiang or qianjiang1
+
+# Generate selfsigned.crt
+Reference:
+http://www.littlebigextra.com/how-to-fix-pkix-path-building-failed-sun-security-provider-certpath-suncertpathbuilderexception/
+
+$ sudo apt install openjdk-11-jre-headless
+$ keytool -export -keystore keystore.jks -alias selfsigned -file selfsigned.crt
+
+sudo docker cp selfsigned.crt ims:/tmp/key
+# docker exec -it ims /bin/bash
+# keytool -importcert -file selfsigned.crt -alias selfsigned -keystore /usr/local/openjdk-8/jre/lib/security/
+
+
+
+
+
+
+
