@@ -27,6 +27,7 @@ sudo docker cp selfsigned.crt ims:/tmp/key
 # docker exec -it ims /bin/bash
 # keytool -importcert -file selfsigned.crt -alias selfsigned -keystore /usr/local/openjdk-8/jre/lib/security/
 
+password: changeit
 
 
 
